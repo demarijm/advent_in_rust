@@ -1,33 +1,19 @@
-use std::fmt::Error;
-use std::fs::File;
-use std::io::BufRead;
-use std::io::BufReader;
+use regex::Regex;
+
+mod part1;
+mod part2;
 fn main() {
-    let filepath = "input.txt";
-    read_file_line_by_line(filepath).expect("Could not read file");
-}
+    // let filepath = "input.txt";
+    let text = "one, two, three, and seven are numbers";
+    let re = Regex::new(r"\b(one|two|three|seven)\b").unwrap();
 
-
-fn read_file_line_by_line(filepath: &str) -> Result<(), Box<dyn std::error::Error>> {
-    let file = File::open(filepath)?;
-    let reader = BufReader::new(file);
-
-    for line in reader.lines() {
-        let line = line?;
-        println!("{}", line);
-        let number = grab_all_numbers_from_each_line(&line)?;
-        println!("{}", number);
+    for cap in re.find_iter(text) {
+        println!("Found: {}", &cap.as_str());
     }
 
-    Ok(())
-}
 
 
-/*
-    This function will take a line of text and return the number that is in the line
-    If there is no number in the line, it will return an error
-*/
-fn grab_all_numbers_from_each_line(line: &str) {
-    println!("{}", line);
 
+    // part1::read_file_line_by_line(filepath).expect("Could not read file");
+    // part2::replace_each_line_with_numbers(filepath).expect("Could not read file");
 }
